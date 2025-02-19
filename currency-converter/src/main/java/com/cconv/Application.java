@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Spring boot application start point
  */
 @SpringBootApplication
-public class Application {
+public class Application { 
 
 	/**
 	 * start point
