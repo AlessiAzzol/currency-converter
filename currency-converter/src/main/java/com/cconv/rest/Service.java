@@ -26,7 +26,6 @@ public class Service {
 
 		try {
 			response = rs.getForObject(url, CurrencyResponse.class);
-			System.out.println(response);
 			response.setStatus(HttpStatus.OK.name());
 			response.setMessage(Constants.STATUS_OK);
 

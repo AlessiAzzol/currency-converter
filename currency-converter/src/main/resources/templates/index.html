@@ -68,19 +68,16 @@
 			box-sizing: border-box;
 			appearance: none;
 		}
-		 input[type="number"]::-webkit-outer-spin-button,
-        input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
 
-        input[type="number"] {
-            -moz-appearance: textfield;
-        }
-
+		input[type="number"]::-webkit-outer-spin-button,
+		input[type="number"]::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+		
 		.form-group i {
 			position: absolute;
-			right: 25px;			
+			right: 25px;
 			top: 50%;
 			transform: translateY(-50%);
 			pointer-events: none;
@@ -105,7 +102,9 @@
 			flex-wrap: wrap;
 		}
 
-		.result {}
+		.result {
+			color: rgb(0, 64, 128)
+		}
 	</style>
 </head>
 
@@ -147,6 +146,7 @@
 		</form>
 		<div th:if="${convertResponse != null}" class="result">
 			<p>Result: <span th:text="${convertResponse.convertedAmount}"></span></p>
+			<p>Last update: <span th:text="${date}"></span></p>
 		</div>
 	</div>
 </body>

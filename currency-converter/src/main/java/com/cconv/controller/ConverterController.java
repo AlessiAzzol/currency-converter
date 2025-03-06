@@ -5,10 +5,14 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.cconv.elements.Currency;
 import com.cconv.elements.request.ConvertRequest;
+import com.cconv.elements.response.ConvertResponse;
 import com.cconv.elements.response.CurrencyListResponse;
+import com.cconv.elements.response.CurrencyResponse;
 import com.cconv.rest.Service;
 
 @Controller
@@ -27,6 +31,24 @@ public class ConverterController {
 		return "index";
 	}
 	
+	@PostMapping({ "/convert" })
+	public String convert(@ModelAttribute ConvertRequest convertRequest, Model model) {
+		ConvertResponse resp = new ConvertResponse();				
+		CurrencyResponse list =	service.getAll().getBody();
+		
+		Double normalizedFrom = list.getCurrencyList().get(convertRequest.getFromCurrency() );
+		Double normalizedTo = list.getCurrencyList().get(convertRequest.getToCurrency() );
+		resp.setConvertedAmount(convert(normalizedFrom, convertRequest.getAmount(), normalizedTo));
+		
+		loadAttributes(model);
+		
+		model.addAttribute("convertRequest", convertRequest);
+		model.addAttribute("convertResponse",resp);		
+		model.addAttribute("date",list.getDate());		
+				
+		return "index";
+	}
+	
 	/**
 	 * Set the static elements of the page
 	 *
@@ -39,10 +61,17 @@ public class ConverterController {
 		CurrencyListResponse resp = service.getCurrencyList().getBody();
 		
 		List<Currency> currencyList = resp.getCurrencyList();				
-	
+		
 		model.addAttribute("base", new Currency("eur", "Euro"));
 		model.addAttribute("fromCurrencies", currencyList);
 		model.addAttribute("toCurrencies", currencyList);
+	}
+	
+	public double convert(Double normalizedFrom, Double amount, Double to) {
+		if(amount == 0)
+			return 0;
+		Double tmp = amount / normalizedFrom;
+		return tmp * to ;
 	}
 
 }
