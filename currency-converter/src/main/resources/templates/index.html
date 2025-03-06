@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
+
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${title}" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+	<style>
+		body {
+			text-align: center;
+			margin: 0;
+			padding: 0;
+			height: 100vh;
+			background: rgb(242, 242, 242);
+			position: relative;
+			overflow: hidden;
+			display: flex;
+			justify-content: center;
+			align-items: flex-start;
+			font-family: Arial, sans-serif;
+		}
+
+		.onda {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			background: rgb(0, 64, 128);
+			clip-path: ellipse(75% 30% at 50% 0%);
+		}
+
+		.data-container {
+			position: relative;
+			z-index: 1;
+			padding: 30px;
+			height: 35%;
+			border-radius: 30px;
+			width: 55%;
+			margin: 80px;
+			background: rgb(255, 255, 255);
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+		}
+
+		.form-group {
+			position: relative;
+			display: flex;
+			align-items: center;
+		}
+
+		.form-group label {
+			position: absolute;
+			bottom: 50px;
+			left: 30px;
+			font-size: 13px;
+			color: gray;
+
+		}
+
+		input,
+		select {
+			margin: 10px 5px;
+			width: 350px;
+			height: 62px;
+			color: rgb(123, 123, 123);
+			font-size: 16px;
+			border-radius: 10px;
+			border: 1px solid rgb(228, 228, 228);
+			padding: 35px 30px 5px;
+			box-sizing: border-box;
+			appearance: none;
+		}
+		 input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+		.form-group i {
+			position: absolute;
+			right: 25px;			
+			top: 50%;
+			transform: translateY(-50%);
+			pointer-events: none;
+		}
+
+		button {
+			margin: 10px 5px;
+			padding: 20px;
+			border-radius: 10px;
+			width: 350px;
+			font-size: 16px;
+			background-color: rgb(255, 200, 55);
+			cursor: pointer;
+			color: rgb(0, 64, 128);
+			border: 0px
+		}
+
+		.form-container {
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+
+		.result {}
+	</style>
+</head>
+
+<body>
+	<div class="onda"></div>
+	<div class="data-container">
+		<h2 th:text="${applicationTitle}" style="margin: 0 0 30px; color: rgb(0, 0, 64); letter-spacing: 2px;" />
+		<form th:action="@{/convert}" th:object="${convertRequest}" method="post">
+			<div class="form-container">
+				<div class="form-group">
+					<label th:for="FromCurrency">From Currency</label>
+					<select id="from" name="from" th:field="*{fromCurrency}">
+						<option th:value="${base.value}" th:text="${base.name}" selected></option>
+						<option th:each="fromCurrency : ${fromCurrencies}" th:value="${fromCurrency.value}"
+							th:text="${fromCurrency.name}"></option>
+					</select>
+					<i class="fa-solid fa-caret-down"></i>
+				</div>
+				<div class="form-group">
+					<label th:for="ToCurrency">To Currency</label>
+					<select id="to" name="to" th:field="*{toCurrency}">
+						<option th:value="${base.value}" th:text="${base.name}" selected></option>
+						<option th:each="toCurrency : ${toCurrencies}" th:value="${toCurrency.value}"
+							th:text="${toCurrency.name}">
+						</option>
+					</select>
+					<i class="fa-solid fa-caret-down"></i>
+				</div>
+				<div class="form-group">
+					<label th:for="amount">Amount</label>
+					<input type="number" id="amount" th:field="*{amount}" />
+				</div>
+				<div>
+					<button type="submit"><i class="fa-solid fa-coins" style="margin-right: 15px;"></i>Convert</button>
+				</div>
+			</div>
+
+
+		</form>
+		<div th:if="${convertResponse != null}" class="result">
+			<p>Result: <span th:text="${convertResponse.convertedAmount}"></span></p>
+		</div>
+	</div>
+</body>
+
+</html>
